@@ -1,1 +1,1 @@
-# Drum-Transcriber-CNN
+# The Very Amazing Drum-Transcriber-CNN
