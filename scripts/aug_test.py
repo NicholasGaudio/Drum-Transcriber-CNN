@@ -1,17 +1,33 @@
 import librosa
-from data_augmentation import add_white_noise, pitch_shift, amplitude_scaling
+from augmentation_functions import add_white_noise, custom_pitch_shift, amplitude_scaling
 import soundfile as sf
+import os
+from env import directory
+import numpy as np
 
-def main():
-    audio_path = r"..\data\snare\snare.mp3"  
-    amplitudes, sample_rate = librosa.load(audio_path, sr=22050, duration=0.5)
+data_dir = directory + "\snare"
 
-    try:
-        white_noise = add_white_noise(amplitudes)
-        sf.write('augmented_white_noise.wav', white_noise, sample_rate)
-    except Exception as e:
-        print(f"Error adding white noise: {e}")
+for root, dirs, files in os.walk(data_dir):
+    for file in files:
+        if "AUGMENTED" in file:
+            continue
+        else:
+            file_path = os.path.join(root, file)
+            file_name = os.path.splitext(file)[0]
 
-if __name__ == "__main__":
-    main()
+            amplitudes, sample_rate = librosa.load(file_path, sr=22050)
+            for i in np.arange(0.001, 0.005, 0.001):
+                augmented = add_white_noise(amplitudes, noise_factor=i)
+                output_path = os.path.join(root, f"{file_name}_WHITE_NOISE_{i: .3f}_AUGMENTED.wav")
+                sf.write(output_path, augmented, sample_rate)
+            for i in range(-8, 9):
+                if i == 0:
+                    continue
+                augmented = custom_pitch_shift(amplitudes, sample_rate, n_steps=i)
+                output_path = os.path.join(root, f"{file_name}_PITCH_SHIFT_{i}_AUGMENTED.wav")
+                sf.write(output_path, augmented, sample_rate)
+            for i in np.arange(.5, 1.51, .1):
+                augmented = amplitude_scaling(amplitudes, scale=i)
+                output_path = os.path.join(root, f"{file_name}_AMPLITUDE_SCALING_{i:.1f}_AUGMENTED.wav")
+                sf.write(output_path, augmented, sample_rate)
     

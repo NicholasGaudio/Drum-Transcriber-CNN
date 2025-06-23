@@ -2,12 +2,13 @@ import librosa
 import numpy as np
 
 def audio_to_melspectrogram(audio_path):
-    amplitudes, sample_rate = librosa.load(audio_path, sr = 22050, duration = 0.5) # load audio, create 1d array of amplitudes
+    duration = .5
+    amplitudes, sample_rate = librosa.load(audio_path, sr = 22050, duration = duration) # load audio, create 1d array of amplitudes
 
     audio_length = len(amplitudes) / sample_rate
-    if audio_length < 0.5:
-        padding = np.zeros(int((0.5 - audio_length) * sample_rate))
-        amplitudes = np.concatenate((amplitudes, padding)) # pad with zeros to make it .5 seconds long
+    if audio_length < duration:
+        padding = np.zeros(int((duration - audio_length) * sample_rate))
+        amplitudes = np.concatenate((amplitudes, padding)) # pad with zeros to make it duration time long
 
     melspectrogram  = librosa.feature.melspectrogram(y=amplitudes, sr=sample_rate, n_mels=128, fmax=8000) # create mel spectrogram
     melspectrogram_decibals = librosa.power_to_db(melspectrogram , ref=np.max) # convert to decibels
