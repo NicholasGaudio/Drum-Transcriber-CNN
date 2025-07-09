@@ -1,4 +1,4 @@
-from data_prep import audio_to_melspectrogram
+from scripts.melspectrograms.data_prep import audio_to_melspectrogram
 import matplotlib.pyplot as plt
 
 melspectrogram = audio_to_melspectrogram(r"..\data\snare\Volume01RoomSnare_04_705.mp3")

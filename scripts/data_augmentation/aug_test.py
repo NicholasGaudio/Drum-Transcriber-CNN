@@ -1,8 +1,8 @@
 import librosa
-from augmentation_functions import add_white_noise, custom_pitch_shift, amplitude_scaling
+from scripts.data_augmentation.augmentation_functions import add_white_noise, custom_pitch_shift, amplitude_scaling
 import soundfile as sf
 import os
-from env import directory
+from scripts.data_augmentation.env import directory
 import numpy as np
 
 data_dir = directory + "\snare"
