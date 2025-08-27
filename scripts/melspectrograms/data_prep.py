@@ -12,6 +12,6 @@ def audio_to_melspectrogram(audio_path):
 
     melspectrogram  = librosa.feature.melspectrogram(y=amplitudes, sr=sample_rate, n_mels=128, fmax=8000) # create mel spectrogram
     melspectrogram_decibals = librosa.power_to_db(melspectrogram , ref=np.max) # convert to decibels
-    melspectrogram_decibals = np.expand_dims(melspectrogram_decibals, axis=-1) # add channel dimension for CNN, now the shape is (128, 128, 1) (height, width, channels)
+    melspectrogram_decibals = np.expand_dims(melspectrogram_decibals, axis=0) # add channel dimension for CNN, now the shape is (1, 128, 128) (channels, height, width)
 
     return melspectrogram_decibals
