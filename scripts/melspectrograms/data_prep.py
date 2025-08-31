@@ -1,5 +1,6 @@
 import librosa
 import numpy as np
+import torch
 
 def audio_to_melspectrogram(audio_path):
     duration = .5
@@ -10,8 +11,9 @@ def audio_to_melspectrogram(audio_path):
         padding = np.zeros(int((duration - audio_length) * sample_rate))
         amplitudes = np.concatenate((amplitudes, padding)) # pad with zeros to make it duration time long
 
-    melspectrogram  = librosa.feature.melspectrogram(y=amplitudes, sr=sample_rate, n_mels=128, fmax=8000) # create mel spectrogram
-    melspectrogram_decibals = librosa.power_to_db(melspectrogram , ref=np.max) # convert to decibels
-    melspectrogram_decibals = np.expand_dims(melspectrogram_decibals, axis=0) # add channel dimension for CNN, now the shape is (1, 128, 128) (channels, height, width)
+    mel  = librosa.feature.melspectrogram(y=amplitudes, sr=sample_rate, n_mels=128, fmax=8000) # create mel spectrogram
+    mel_decibals = librosa.power_to_db(mel , ref=np.max) # convert to decibels
+    mel_decibals = torch.tensor(mel, dtype=torch.float32)
+    mel_decibals = mel_decibals.unsqueeze(0)
 
-    return melspectrogram_decibals
+    return mel_decibals
