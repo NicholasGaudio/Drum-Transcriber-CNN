@@ -15,7 +15,7 @@ class DrumCNN(nn.Module):
     def forward(self, x): # x has shape of (batch_size, 1, 128, 128) (Batch, 1 channel, 128 height, 128 width)
         x = self.pool(F.relu(self.conv1(x)))  # (B, 16, 64, 64)
         x = self.pool(F.relu(self.conv2(x)))  # (B, 32, 32, 32)
-        x = x.view(-1, 32 * 32 * 32) #makes it (batch_size, features)
+        x = x.view(x.size(0), -1)  # flattens each sample dynamically
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return x

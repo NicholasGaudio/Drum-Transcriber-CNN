@@ -1,6 +1,6 @@
 import os
 import subprocess
-from scripts.data_augmentation.env import directory, ffmpeg_path
+from scripts.env import directory, ffmpeg_path
 
 data_dir = directory
 
